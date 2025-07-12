@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription - Numerology App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="https://placehold.co/80x80?text=🔮" alt="Numerology Logo" class="img-fluid">
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/numerology/create">
+                    <i class="fas fa-plus-circle"></i> New Chart
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/numerology">
+                    <i class="fas fa-list"></i> Chart List 
+                    <!-- <span class="badge rounded-pill">3</span> -->
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/profile">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/invoice">
+                    <i class="fas fa-file-invoice"></i> Invoice
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/subscription">
+                    <i class="fas fa-credit-card"></i> Subscription
+                </a>
+            </li>
+        </ul>
+        <div class="logout">
+            <a class="nav-link" href="/user/logout" onclick="return confirm('Are you sure you want to logout?')">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <div class="topbar mb-4">
+            <div class="d-flex align-items-center">
+                <a href="/numerology" class="btn btn-outline-success me-3">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <button class="btn btn-outline-success">
+                    <i class="fas fa-globe"></i> English
+                </button>
+            </div>
+            <div class="profile">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-credit-card"></i>
+                Subscription Management
+            </h1>
+            <p>Choose the perfect plan for your numerology journey</p>
+        </div>
+
+        <!-- Current Plan Info -->
+        <div class="current-plan-info">
+            <div class="current-plan-header">
+                <div class="current-plan-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3 class="current-plan-title">Current Plan: Premium</h3>
+            </div>
+            
+            <div class="current-plan-details">
+                <div class="plan-detail">
+                    <div class="plan-detail-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="plan-detail-content">
+                        <h6>Next Billing Date</h6>
+                        <p>January 15, 2025</p>
+                    </div>
+                </div>
+                
+                <div class="plan-detail">
+                    <div class="plan-detail-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="plan-detail-content">
+                        <h6>Monthly Amount</h6>
+                        <p>$99.99/month</p>
+                    </div>
+                </div>
+                
+                <div class="plan-detail">
+                    <div class="plan-detail-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="plan-detail-content">
+                        <h6>Charts Created</h6>
+                        <p>12 this month</p>
+                    </div>
+                </div>
+                
+                <div class="plan-detail">
+                    <div class="plan-detail-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="plan-detail-content">
+                        <h6>Plan Status</h6>
+                        <p>Active</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscription Plans -->
+        <div class="subscription-card">
+            <div class="subscription-header">
+                <h3><i class="fas fa-star"></i> Choose Your Plan</h3>
+                <p>Select the plan that best fits your numerology needs</p>
+            </div>
+            
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <div class="plan-name">Basic</div>
+                    <div class="plan-price">$19.99</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> 5 Charts per month</li>
+                        <li><i class="fas fa-check"></i> Basic numerology readings</li>
+                        <li><i class="fas fa-check"></i> Email support</li>
+                        <li><i class="fas fa-times"></i> Expert consultations</li>
+                        <li><i class="fas fa-times"></i> Priority support</li>
+                    </ul>
+                    <button class="btn-subscribe" onclick="subscribe('basic')">
+                        <i class="fas fa-arrow-right"></i> Subscribe
+                    </button>
+                </div>
+                
+                <div class="plan-card featured current">
+                    <div class="plan-badge">Current</div>
+                    <div class="plan-name">Premium</div>
+                    <div class="plan-price">$99.99</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Unlimited charts</li>
+                        <li><i class="fas fa-check"></i> Advanced numerology readings</li>
+                        <li><i class="fas fa-check"></i> Expert consultations</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                        <li><i class="fas fa-check"></i> PDF reports</li>
+                    </ul>
+                    <button class="btn-current">Current Plan</button>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-badge popular">Popular</div>
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-price">$199.99</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Everything in Premium</li>
+                        <li><i class="fas fa-check"></i> API access</li>
+                        <li><i class="fas fa-check"></i> White-label solutions</li>
+                        <li><i class="fas fa-check"></i> Dedicated support</li>
+                        <li><i class="fas fa-check"></i> Custom integrations</li>
+                    </ul>
+                    <button class="btn-subscribe" onclick="subscribe('enterprise')">
+                        <i class="fas fa-arrow-right"></i> Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing History -->
+        <div class="billing-history">
+            <div class="billing-header">
+                <i class="fas fa-history" style="color: var(--primary-color); font-size: 1.5rem;"></i>
+                <h3>Billing History</h3>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Dec 15, 2024</strong></td>
+                            <td>Premium Plan - Monthly</td>
+                            <td class="amount positive">$99.99</td>
+                            <td><span class="status-badge status-paid">Paid</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="downloadInvoice('DEC-2024')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nov 15, 2024</strong></td>
+                            <td>Premium Plan - Monthly</td>
+                            <td class="amount positive">$99.99</td>
+                            <td><span class="status-badge status-paid">Paid</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="downloadInvoice('NOV-2024')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oct 15, 2024</strong></td>
+                            <td>Premium Plan - Monthly</td>
+                            <td class="amount positive">$99.99</td>
+                            <td><span class="status-badge status-paid">Paid</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="downloadInvoice('OCT-2024')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+
+        // AJAX Navigation - SPA functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle sidebar navigation clicks
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const href = this.getAttribute('href');
+                    const isActive = this.classList.contains('active');
+                    
+                    // Don't reload if already on the same page
+                    if (isActive) return;
+                    
+                    // Update active state
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Load content via AJAX
+                    loadPage(href);
+                    
+                    // Update browser URL without refresh
+                    history.pushState({}, '', href);
+                    
+                    // Close mobile sidebar if open
+                    const sidebar = document.getElementById('sidebar');
+                    const overlay = document.querySelector('.sidebar-overlay');
+                    if (sidebar.classList.contains('show')) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                    }
+                });
+            });
+            
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', function() {
+                loadPage(window.location.pathname);
+                updateActiveNav();
+            });
+        });
+        
+        function loadPage(url) {
+            const mainContent = document.querySelector('.main-content');
+            
+            // Show loading state
+            mainContent.innerHTML = `
+                <div class="loading-container" style="display: flex; justify-content: center; align-items: center; height: 50vh;">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `;
+            
+            // Fetch the page content
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    // Extract main content from the response
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newMainContent = doc.querySelector('.main-content');
+                    
+                    if (newMainContent) {
+                        mainContent.innerHTML = newMainContent.innerHTML;
+                        
+                        // Re-initialize any scripts that might be needed
+                        initializePageScripts();
+                    } else {
+                        // Fallback to full page reload if AJAX fails
+                        window.location.href = url;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading page:', error);
+                    // Fallback to full page reload
+                    window.location.href = url;
+                });
+        }
+        
+        function updateActiveNav() {
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            
+            sidebarLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+        
+        function initializePageScripts() {
+            // Re-initialize any page-specific functionality
+            // This will be called after AJAX content loads
+            
+            // Re-initialize search functionality if on numerology index
+            if (window.location.pathname === '/numerology' || window.location.pathname === '/numerology/') {
+                initializeSearch();
+            }
+            
+            // Re-initialize form validation if on create page
+            if (window.location.pathname === '/numerology/create') {
+                initializeFormValidation();
+            }
+        }
+        
+        // Initialize search functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const tableRows = document.querySelectorAll('tbody tr');
+                    
+                    tableRows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        if (text.includes(searchTerm)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        }
+        
+        // Initialize form validation
+        function initializeFormValidation() {
+            const form = document.getElementById('numerologyForm');
+            if (form) {
+                const inputs = form.querySelectorAll('input, select, textarea');
+                
+                inputs.forEach(input => {
+                    input.addEventListener('blur', validateField);
+                    input.addEventListener('input', clearValidation);
+                });
+                
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (validateForm()) {
+                        // Submit form via AJAX
+                        submitForm();
+                    }
+                });
+            }
+        }
+        
+        function validateField(e) {
+            const field = e.target;
+            const value = field.value.trim();
+            
+            // Remove existing validation classes
+            field.classList.remove('is-valid', 'is-invalid');
+            
+            // Basic validation rules
+            if (field.hasAttribute('required') && !value) {
+                field.classList.add('is-invalid');
+                return false;
+            }
+            
+            // Email validation
+            if (field.type === 'email' && value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    field.classList.add('is-invalid');
+                    return false;
+                }
+            }
+            
+            // If validation passes
+            if (value) {
+                field.classList.add('is-valid');
+            }
+            
+            return true;
+        }
+        
+        function clearValidation(e) {
+            const field = e.target;
+            field.classList.remove('is-valid', 'is-invalid');
+        }
+        
+        function validateForm() {
+            const form = document.getElementById('numerologyForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!validateField({ target: input })) {
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        }
+        
+        function submitForm() {
+            const form = document.getElementById('numerologyForm');
+            const formData = new FormData(form);
+            
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Chart...';
+            submitBtn.disabled = true;
+            
+            fetch('/numerology/create', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to the created chart
+                    loadPage(`/numerology/${data.chartId}`);
+                } else {
+                    // Show error message
+                    alert(data.message || 'Error creating chart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating chart. Please try again.');
+            })
+            .finally(() => {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+
+        // Subscription actions
+        function subscribe(plan) {
+            alert(`Subscribing to ${plan} plan...`);
+        }
+
+        function downloadInvoice(period) {
+            alert(`Downloading invoice for ${period}`);
+        }
+
+        // Add loading states
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove loading state if any
+            const loadingElements = document.querySelectorAll('.loading');
+            loadingElements.forEach(el => el.remove());
+            
+            // Initialize page-specific functionality
+            initializePageScripts();
+        });
+    </script>
+</body>
+</html> 

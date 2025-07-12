@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart List - Numerology App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="https://placehold.co/80x80?text=🔮" alt="Numerology Logo" class="img-fluid">
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/numerology/create">
+                    <i class="fas fa-plus-circle"></i> New Chart
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/numerology">
+                    <i class="fas fa-list"></i> Chart List 
+                    <!-- <span class="badge rounded-pill">3</span> -->
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/profile">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/invoice">
+                    <i class="fas fa-file-invoice"></i> Invoice
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/subscription">
+                    <i class="fas fa-credit-card"></i> Subscription
+                </a>
+            </li>
+        </ul>
+        <div class="logout">
+            <a class="nav-link" href="/user/logout" onclick="return confirm('Are you sure you want to logout?')">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <div class="topbar mb-4">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-success me-3">
+                    <i class="fas fa-globe"></i> English
+                </button>
+            </div>
+            <div class="profile">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+        
+        <% if (successMessage) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= successMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+
+        <% if (errorMessage) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= errorMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-chart-line"></i>
+                Numerology Charts
+            </h1>
+            <p>Manage and view all your numerology charts</p>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="stat-number">12</div>
+                <div class="stat-label">Total Charts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-number">3</div>
+                <div class="stat-label">This Month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-number">8.5</div>
+                <div class="stat-label">Avg. Rating</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="stat-number">24</div>
+                <div class="stat-label">Downloads</div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by name or birth date" autocomplete="off">
+            <button type="button" class="search-btn" onclick="searchCharts()">
+                <i class="fas fa-search"></i>
+            </button>
+            <button type="button" class="reset-btn" onclick="resetSearch()">
+                <i class="fas fa-times"></i> Reset
+            </button>
+        </div>
+
+        <div class="table-container">
+            <h5 class="mb-3" style="font-weight:600; color:#22223b;">All Chart List</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>S. NO.</th>
+                            <th>CHART NAME</th>
+                            <th>BIRTH DATE</th>
+                            <th colspan="5" style="text-align:center;">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (charts && charts.length > 0) { %>
+                            <% charts.forEach((chart, index) => { %>
+                                <tr>
+                                    <td><span class="badge bg-light text-dark"><%= (currentPage - 1) * 10 + index + 1 %></span></td>
+                                    <td class="chart-name-cell">
+                                        <% if (chart.gender === 'male') { %>
+                                            <img src="/img/man.png" class="chart-avatar" alt="avatar">
+                                        <% } else { %>
+                                            <img src="/img/woman.png" class="chart-avatar" alt="avatar">
+                                        <% } %>
+                                        <div>
+                                            <div style="font-weight:600;"><%= chart.name %></div>
+                                        </div>
+                                    </td>
+                                    <td><%= new Date(chart.birthDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
+                                    <td colspan="5">
+                                        <div class="action-btns">
+                                            <button class="btn btn-expert btn-sm" onclick="expertAdvice('<%= chart._id %>')">Expert Advice</button>
+                                            <button class="btn btn-pdf btn-sm" onclick="downloadPDF('<%= chart._id %>')"><i class="fas fa-file-pdf"></i></button>
+                                            <a href="/numerology/<%= chart._id %>" class="btn btn-view btn-sm"><i class="fas fa-eye"></i></a>
+                                            <a href="/numerology/<%= chart._id %>/edit" class="btn btn-edit btn-sm"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-delete btn-sm" onclick="deleteChart('<%= chart._id %>')"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8" class="text-center py-4">
+                                    <div class="empty-state">
+                                        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                                        <h5>No charts found</h5>
+                                        <p class="text-muted">Create your first numerology chart to get started</p>
+                                        <a href="/numerology/create" class="btn btn-primary">
+                                            <i class="fas fa-plus"></i> Create Chart
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div class="empty-state" style="display: none;">
+            <i class="fas fa-chart-line"></i>
+            <h5>No charts found</h5>
+            <p>Create your first numerology chart to get started</p>
+            <a href="/numerology/create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create First Chart
+            </a>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.alert').forEach(alert => alert.classList.remove('show'));
+        }, 4000);
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+
+        // AJAX Navigation - SPA functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle sidebar navigation clicks
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const href = this.getAttribute('href');
+                    const isActive = this.classList.contains('active');
+                    
+                    // Don't reload if already on the same page
+                    if (isActive) return;
+                    
+                    // Update active state
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Load content via AJAX
+                    loadPage(href);
+                    
+                    // Update browser URL without refresh
+                    history.pushState({}, '', href);
+                    
+                    // Close mobile sidebar if open
+                    const sidebar = document.getElementById('sidebar');
+                    const overlay = document.querySelector('.sidebar-overlay');
+                    if (sidebar.classList.contains('show')) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                    }
+                });
+            });
+            
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', function() {
+                loadPage(window.location.pathname);
+                updateActiveNav();
+            });
+        });
+        
+        function loadPage(url) {
+            const mainContent = document.querySelector('.main-content');
+            
+            // Show loading state
+            mainContent.innerHTML = `
+                <div class="loading-container" style="display: flex; justify-content: center; align-items: center; height: 50vh;">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `;
+            
+            // Fetch the page content
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    // Extract main content from the response
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newMainContent = doc.querySelector('.main-content');
+                    
+                    if (newMainContent) {
+                        mainContent.innerHTML = newMainContent.innerHTML;
+                        
+                        // Re-initialize any scripts that might be needed
+                        initializePageScripts();
+                    } else {
+                        // Fallback to full page reload if AJAX fails
+                        window.location.href = url;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading page:', error);
+                    // Fallback to full page reload
+                    window.location.href = url;
+                });
+        }
+        
+        function updateActiveNav() {
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            
+            sidebarLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+        
+        function initializePageScripts() {
+            // Re-initialize any page-specific functionality
+            // This will be called after AJAX content loads
+            
+            // Re-initialize search functionality if on numerology index
+            if (window.location.pathname === '/numerology' || window.location.pathname === '/numerology/') {
+                initializeSearch();
+            }
+            
+            // Re-initialize form validation if on create page
+            if (window.location.pathname === '/numerology/create') {
+                initializeFormValidation();
+            }
+        }
+        
+        // Initialize search functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const tableRows = document.querySelectorAll('tbody tr');
+                    
+                    tableRows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        if (text.includes(searchTerm)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        }
+        
+        // Initialize form validation
+        function initializeFormValidation() {
+            const form = document.getElementById('numerologyForm');
+            if (form) {
+                const inputs = form.querySelectorAll('input, select, textarea');
+                
+                inputs.forEach(input => {
+                    input.addEventListener('blur', validateField);
+                    input.addEventListener('input', clearValidation);
+                });
+                
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (validateForm()) {
+                        // Submit form via AJAX
+                        submitForm();
+                    }
+                });
+            }
+        }
+        
+        function validateField(e) {
+            const field = e.target;
+            const value = field.value.trim();
+            
+            // Remove existing validation classes
+            field.classList.remove('is-valid', 'is-invalid');
+            
+            // Basic validation rules
+            if (field.hasAttribute('required') && !value) {
+                field.classList.add('is-invalid');
+                return false;
+            }
+            
+            // Email validation
+            if (field.type === 'email' && value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    field.classList.add('is-invalid');
+                    return false;
+                }
+            }
+            
+            // If validation passes
+            if (value) {
+                field.classList.add('is-valid');
+            }
+            
+            return true;
+        }
+        
+        function clearValidation(e) {
+            const field = e.target;
+            field.classList.remove('is-valid', 'is-invalid');
+        }
+        
+        function validateForm() {
+            const form = document.getElementById('numerologyForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!validateField({ target: input })) {
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        }
+        
+        function submitForm() {
+            const form = document.getElementById('numerologyForm');
+            const formData = new FormData(form);
+            
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Chart...';
+            submitBtn.disabled = true;
+            
+            fetch('/numerology/create', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to the created chart
+                    loadPage(`/numerology/${data.chartId}`);
+                } else {
+                    // Show error message
+                    alert(data.message || 'Error creating chart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating chart. Please try again.');
+            })
+            .finally(() => {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+
+        // Delete chart function
+        function deleteChart(chartId) {
+            if (confirm('Are you sure you want to delete this chart? This action cannot be undone.')) {
+                const btn = event.target.closest('button');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+
+                fetch(`/numerology/delete/${chartId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the row from the table
+                        const row = btn.closest('tr');
+                        row.style.opacity = '0.5';
+                        row.style.transform = 'translateX(-100%)';
+                        setTimeout(() => {
+                            row.remove();
+                            // Check if table is empty
+                            const tbody = document.querySelector('tbody');
+                            if (tbody.children.length === 0) {
+                                const emptyRow = document.createElement('tr');
+                                emptyRow.innerHTML = `
+                                    <td colspan="8" class="text-center py-4">
+                                        <div class="empty-state">
+                                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                                            <h5>No charts found</h5>
+                                            <p class="text-muted">Create your first numerology chart to get started</p>
+                                            <a href="/numerology/create" class="btn btn-primary">
+                                                <i class="fas fa-plus"></i> Create Chart
+                                            </a>
+                                        </div>
+                                    </td>
+                                `;
+                                tbody.appendChild(emptyRow);
+                            }
+                        }, 300);
+                    } else {
+                        alert('Error deleting chart');
+                    }
+                })
+                .catch(() => {
+                    alert('Error deleting chart');
+                })
+                .finally(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                });
+            }
+        }
+
+        // Expert advice function
+        function expertAdvice(chartId) {
+            // Show loading state
+            const btn = event.target.closest('button');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+            
+            // Simulate expert advice request (replace with actual API call)
+            setTimeout(() => {
+                alert(`Expert advice feature coming soon for chart: ${chartId}`);
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        // Add loading states
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove loading state if any
+            const loadingElements = document.querySelectorAll('.loading');
+            loadingElements.forEach(el => el.remove());
+            
+            // Initialize page-specific functionality
+            initializePageScripts();
+        });
+
+        // Search functionality
+        function searchCharts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                // Chart Name
+                const name = row.querySelector('.chart-name-cell div').textContent.toLowerCase();
+                // Birth Date
+                const birthDate = row.children[2].textContent.toLowerCase();
+                if (name.includes(searchTerm) || birthDate.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        function resetSearch() {
+            document.getElementById('searchInput').value = '';
+            searchCharts();
+        }
+        // Also trigger search on input
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', searchCharts);
+        }
+        // PDF download stub
+        function downloadPDF(chartId) {
+            alert('PDF download coming soon for chart: ' + chartId);
+        }
+    </script>
+</body>
+</html>
+

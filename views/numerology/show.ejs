@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Chart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f6fafb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .sidebar {
+            background: #fff;
+            min-height: 100vh;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+            padding: 2rem 1rem 1rem 1rem;
+        }
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            transition: background 0.2s;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: #e6f4ea;
+            color: #219653;
+        }
+        .sidebar .nav-link .badge {
+            background: #219653;
+            color: #fff;
+            font-size: 0.8rem;
+        }
+        .sidebar .logout {
+            margin-top: 2rem;
+        }
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid #e9ecef;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        .topbar .btn {
+            border-radius: 20px;
+            font-size: 0.95rem;
+        }
+        .topbar .profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e6f4ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #219653;
+        }
+        .main-content {
+            padding: 2rem 2rem 2rem 0;
+        }
+        .card-details {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(33, 150, 83, 0.07);
+            padding: 2.5rem 2rem;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+        .card-details h3 {
+            color: #219653;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+        }
+        .details-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .details-list li:last-child {
+            border-bottom: none;
+        }
+        .details-label {
+            min-width: 120px;
+            color: #219653;
+            font-weight: 500;
+        }
+        .details-value {
+            color: #333;
+            font-weight: 400;
+        }
+        .btn-info {
+            background: #e6f4ea;
+            color: #219653;
+            border: none;
+            border-radius: 20px;
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+        }
+        .btn-edit {
+            background: #219653;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+        }
+        @media (max-width: 991px) {
+            .main-content { padding: 2rem 0.5rem; }
+        }
+        @media (max-width: 767px) {
+            .sidebar { display: none; }
+            .main-content { padding: 1rem 0.2rem; }
+            .card-details { padding: 1rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <div class="logo mb-4">
+                <img src="https://placehold.co/80x80?text=Logo" alt="Logo" class="img-fluid rounded-circle">
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="/numerology/create"><i class="fas fa-plus-circle"></i> New Chart</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/numerology"><i class="fas fa-list"></i> Chart List <!-- <span class="badge rounded-pill">3</span> --></a></li>
+                <li class="nav-item"><a class="nav-link" href="/user/profile"><i class="fas fa-user"></i> My Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="/invoice"><i class="fas fa-file-invoice"></i> Invoice</a></li>
+                <li class="nav-item"><a class="nav-link" href="/subscription"><i class="fas fa-credit-card"></i> Subscription</a></li>
+            </ul>
+            <div class="logout">
+                <a class="nav-link" href="/user/logout" onclick="return confirm('Are you sure you want to logout?')">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </nav>
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto main-content">
+            <!-- Topbar -->
+            <div class="topbar mb-4">
+                <button class="btn btn-outline-success">English</button>
+                <div class="profile"><i class="fas fa-user"></i></div>
+            </div>
+            <!-- Card Details -->
+            <div class="card-details">
+                <h3><i class="fas fa-id-card me-2"></i> Chart Details</h3>
+                <ul class="details-list">
+                    <li><span class="details-label"><i class="fas fa-user me-2"></i> Name:</span> <span class="details-value"><%= chart.name %></span></li>
+                    <li><span class="details-label"><i class="fas fa-calendar me-2"></i> Birth Date:</span> <span class="details-value"><%= new Date(chart.birthDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }) %></span></li>
+                    <li><span class="details-label"><i class="fas fa-phone me-2"></i> Phone:</span> <span class="details-value"><%= chart.phone %></span></li>
+                    <li><span class="details-label"><i class="fas fa-car me-2"></i> Vehicle:</span> <span class="details-value"><%= chart.vehicle %></span></li>
+                    <li><span class="details-label"><i class="fas fa-venus-mars me-2"></i> Gender:</span> <span class="details-value text-capitalize"><%= chart.gender %></span></li>
+                </ul>
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="/numerology/<%= chart._id %>/edit" class="btn btn-edit"><i class="fas fa-edit me-2"></i> Edit</a>
+                    <a href="/numerology" class="btn btn-info"><i class="fas fa-arrow-left me-2"></i> Back to Charts</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
