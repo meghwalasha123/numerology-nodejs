@@ -5,26 +5,73 @@ const numerologySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    birthDate: {
+    date: {
         type: String,
         required: true,
     },
-    phone: {
+    time: {
         type: String,
         required: true,
     },
-    vehicle: {
+    lat: {
+        type: Number,
+        required: true,
+    },
+    lon: {
+        type: Number,
+        required: true,
+    },
+    tz: {
+        type: Number,
+        required: true,
+    },
+    lang: {
         type: String,
         required: true,
     },
-    gender: {
+    style: {
         type: String,
         required: true,
+    },
+    place: {
+        type: String,
+        required: true,
+    },
+    company_name: {
+        type: String,
+        required: true,
+    },
+    company_address: {
+        type: String,
+        required: true,
+    },
+    company_email: {
+        type: String,
+        required: true,
+    },
+    company_phone: {
+        type: String,
+        required: true,
+    },
+    company_website: {
+        type: String,
+        required: true,
+    },
+    pdf_type: {
+        type: String,
+        required: true,
+    },
+    pdfUrl: {
+        type: String,
+        required: false,
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'user',
     },
+    // phone: { type: String },
+    // vehicle: { type: String },
+    // gender: { type: String },
 }, { timestamps: true });
 
 const Numerology = mongoose.model("numerology", numerologySchema);

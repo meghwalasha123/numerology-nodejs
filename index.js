@@ -2,7 +2,7 @@ const express = require("express");
 
 const path = require("path");
 
-const cookiePaser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 
 const { connectToMongoDB } = require("./connect");
 
@@ -25,7 +25,7 @@ app.set("views", path.resolve("./views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(cookiePaser());
+app.use(cookieParser());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));

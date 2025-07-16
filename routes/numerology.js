@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const {
     indexChart,
@@ -17,7 +18,7 @@ router.get("/", indexChart);
 router.get("/index", indexChart);
 
 router.get("/create", (req, res) => {
-    return res.render("numerology/create");
+    return res.render("numerology/create", { googleMapApiKey: process.env.GOOGLE_MAP_API_KEY });
 });
 
 router.post("/store", storeChart);

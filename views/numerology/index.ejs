@@ -155,23 +155,16 @@
                                 <tr>
                                     <td><span class="badge bg-light text-dark"><%= (currentPage - 1) * 10 + index + 1 %></span></td>
                                     <td class="chart-name-cell">
-                                        <% if (chart.gender === 'male') { %>
-                                            <img src="/img/man.png" class="chart-avatar" alt="avatar">
-                                        <% } else { %>
-                                            <img src="/img/woman.png" class="chart-avatar" alt="avatar">
-                                        <% } %>
-                                        <div>
-                                            <div style="font-weight:600;"><%= chart.name %></div>
-                                        </div>
+                                        <div style="font-weight:600;"><%= chart.name %></div>
                                     </td>
-                                    <td><%= new Date(chart.birthDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
+                                    <td><%= new Date(chart.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
                                     <td colspan="5">
                                         <div class="action-btns">
-                                            <button class="btn btn-expert btn-sm" onclick="expertAdvice('<%= chart._id %>')">Expert Advice</button>
-                                            <button class="btn btn-pdf btn-sm" onclick="downloadPDF('<%= chart._id %>')"><i class="fas fa-file-pdf"></i></button>
-                                            <a href="/numerology/<%= chart._id %>" class="btn btn-view btn-sm"><i class="fas fa-eye"></i></a>
-                                            <a href="/numerology/<%= chart._id %>/edit" class="btn btn-edit btn-sm"><i class="fas fa-edit"></i></a>
-                                            <button class="btn btn-delete btn-sm" onclick="deleteChart('<%= chart._id %>')"><i class="fas fa-trash"></i></button>
+                                            <!-- <button class="btn btn-expert btn-sm" onclick="expertAdvice('<%= chart._id %>')">Expert Advice</button> -->
+                                            <button class="btn btn-pdf btn-sm" onclick="downloadPDF('<%= chart._id %>')"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                                            <!-- <a href="/numerology/<%= chart._id %>" class="btn btn-view btn-sm"><i class="fas fa-eye"></i></a> -->
+                                            <!-- <a href="/numerology/<%= chart._id %>/edit" class="btn btn-edit btn-sm"><i class="fas fa-edit"></i></a> -->
+                                            <!-- <button class="btn btn-delete btn-sm" onclick="deleteChart('<%= chart._id %>')"><i class="fas fa-trash"></i></button> -->
                                         </div>
                                     </td>
                                 </tr>
@@ -208,6 +201,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Expose charts array to JS
+        const charts = <%- JSON.stringify(charts).replace(/</g, '\u003c') %>;
+
         setTimeout(() => {
             document.querySelectorAll('.alert').forEach(alert => alert.classList.remove('show'));
         }, 4000);
@@ -469,6 +465,33 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        // Show success alert at the top
+                        let alertBox = document.getElementById('ajaxSuccessAlert');
+                        if (!alertBox) {
+                            alertBox = document.createElement('div');
+                            alertBox.id = 'ajaxSuccessAlert';
+                            alertBox.className = 'alert alert-success alert-dismissible fade show';
+                            alertBox.role = 'alert';
+                            alertBox.innerHTML = `
+                                ${data.message || 'Chart deleted successfully'}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            `;
+                            const mainContent = document.querySelector('.main-content');
+                            mainContent.insertBefore(alertBox, mainContent.firstChild);
+                            setTimeout(() => {
+                                if (alertBox) alertBox.classList.remove('show');
+                            }, 4000);
+                        } else {
+                            alertBox.innerHTML = `
+                                ${data.message || 'Chart deleted successfully'}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            `;
+                            alertBox.classList.add('show');
+                            setTimeout(() => {
+                                if (alertBox) alertBox.classList.remove('show');
+                            }, 4000);
+                        }
+
                         // Remove the row from the table
                         const row = btn.closest('tr');
                         row.style.opacity = '0.5';
@@ -495,11 +518,12 @@
                             }
                         }, 300);
                     } else {
-                        alert('Error deleting chart');
+                        // Show error alert
+                        alert(data.message || 'Error deleting chart');
                     }
                 })
                 .catch(() => {
-                    alert('Error deleting chart');
+                    alert('Error deleting chart. Please try again.');
                 })
                 .finally(() => {
                     btn.innerHTML = originalHTML;
@@ -542,8 +566,8 @@
                 // Chart Name
                 const name = row.querySelector('.chart-name-cell div').textContent.toLowerCase();
                 // Birth Date
-                const birthDate = row.children[2].textContent.toLowerCase();
-                if (name.includes(searchTerm) || birthDate.includes(searchTerm)) {
+                const date = row.children[2].textContent.toLowerCase();
+                if (name.includes(searchTerm) || date.includes(searchTerm)) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -561,7 +585,13 @@
         }
         // PDF download stub
         function downloadPDF(chartId) {
-            alert('PDF download coming soon for chart: ' + chartId);
+            // Find the chart row and get the pdfUrl from a data attribute or from the chart object
+            const chart = charts.find(c => c._id === chartId);
+            if (chart && chart.pdfUrl) {
+                window.open(chart.pdfUrl, '_blank');
+            } else {
+                alert('PDF not available yet. Please try again later.');
+            }
         }
     </script>
 </body>
